@@ -1,0 +1,39 @@
+<!-- Example HTML form to delete a patient by ID -->
+<form id="deletePatientForm">
+    <label for="patientId">Patient ID:</label>
+    <input type="text" id="patientId" name="patientId" required><br>
+    <button type="button" id="deletePatientButton">Delete Patient</button>
+</form>
+
+<!-- JavaScript to handle the deletion -->
+<script>
+    // Add an event listener to the button
+    document.getElementById("deletePatientButton").addEventListener("click", function () {
+        // Get the patient ID from the input field
+        const patientId = document.getElementById("patientId").value;
+
+        // Send a DELETE request to the backend API
+        fetch(`/patients/${patientId}`, {
+            method: "DELETE",
+        })
+            .then((response) => {
+                if (response.ok) {
+                    // Successful deletion, you can show a success message
+                    console.log("Patient deleted successfully.");
+                    // Optionally, clear the input field after successful deletion
+                    document.getElementById("patientId").value = "";
+                } else if (response.status === 404) {
+                    // Patient not found, display an error message
+                    console.error("Patient not found. Please check the provided ID.");
+                } else {
+                    // Handle other error cases
+                    console.error("Error deleting patient. Status: " + response.status);
+                }
+            })
+            .catch((error) => {
+                // Handle network or other errors
+                console.error("An error occurred:", error);
+            });
+    });
+</script>
+
